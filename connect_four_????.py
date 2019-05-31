@@ -1,70 +1,68 @@
+from settings import *
 
-import arcade
+x_chips = [0]*len(grid)
 
-WIDTH = 100
-HEIGHT= 100
+class MyGame(arcade.Window):
+    """ Main application class. """
 
-MARGIN = 15
+    def __init__(self):
+        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+        self.shape_list = None
+        self.radius = 20
 
-ROW_COUNT = 6
-COLUMN_COUNT = 7
 
-grid = []
+    def update(self, dt):
+        """ Move everything """
+        index = len(grid[0])-1
+        # for i in range(len(grid)):
+        #     if grid[i][index] == 1 and grid[i][index-1] != 0:
+        #         continue
+        #     else:
+        #         grid[i][index] = 0
+        #         grid[i][index-1] = 1
 
-SCREEN_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN
-SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 
-def on_update(delta_time):
-   pass
 
-def on_draw():
-   arcade.start_render()
-   # Draw in here...
-   for row in range(ROW_COUNT):
-       for column in range(COLUMN_COUNT):
-           if grid[row][column] == 1:
-               color = arcade.color.GREEN
-           else:
-               color = arcade.color.WHITE
+    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
+            global curr
+            for i in  range(len(x_chips)):
+                if x_chips[i]-WIDTH<x < x_chips[i] and (button == arcade.MOUSE_BUTTON_LEFT or button == arcade.MOUSE_BUTTON_MIDDLE or button == arcade.MOUSE_BUTTON_RIGHT):
+                    if curr:
+                        grid[i][len(grid[0])-1] = 1
+                        curr = False
+                    else:
+                        grid[i][len(grid[0])-1] = 2
+                        curr = True
 
-           x = (MARGIN + WIDTH) * column + MARGIN + WIDTH // 2
-           y = (MARGIN + HEIGHT) * row + MARGIN + HEIGHT // 2
-           arcade.draw_circle_filled(x, y, WIDTH, HEIGHT, color)
 
-def on_key_press(key, modifiers):
-   pass
 
-def on_key_release(key, modifiers):
-   pass
 
-def on_mouse_press(x, y, button, modifiers):
-    pass
+    def on_draw(self):
+        """
+        Render the screen.
+        """
+        arcade.start_render()
+        margin_x = SCREEN_WIDTH//2  - WIDTH*2
+        margin_y = SCREEN_HEIGHT//2 - WIDTH*2
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                x_chips[i] = (margin_x + i*WIDTH)
+                arcade.draw_rectangle_filled( margin_x+ i*WIDTH,margin_y + j *WIDTH,WIDTH, WIDTH, arcade.color.WHITE)
+                if grid[i][j] == 0:
+                    arcade.draw_circle_filled(margin_x + i*WIDTH, margin_y + j*WIDTH, WIDTH//2, arcade.color.BLACK)
+                if grid[i][j] == 1:
+                    arcade.draw_circle_filled(margin_x + i*WIDTH, margin_y + j*WIDTH, WIDTH//2, arcade.color.RED)
+                if grid[i][j] == 2:
+                    arcade.draw_circle_filled(margin_x + i*WIDTH, margin_y + j*WIDTH, WIDTH//2, arcade.color.BLUE)
 
-def setup():
-   global grid
-   arcade.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, "Connect Four")
-   arcade.set_background_color(arcade.color.BLACK)
-   arcade.schedule(on_update, 1/60)
-   # Override arcade window methods
-   window = arcade.get_window()
-   window.on_draw = on_draw
-   window.on_key_press = on_key_press
-   window.on_key_release = on_key_release
-   window.on_mouse_press = on_mouse_press
-   # create a 10 x 10 2D list of numbers
-   # --- Populate grid the grid
-   # Loop for each row
-   for row in range(ROW_COUNT):
-       # For each row, create a list that will
-       # represent an entire row
-       grid.append([])
-       # Loop for each column
-       for column in range(COLUMN_COUNT):
-           # Add a the number zero to the current row
-           grid[row].append(0)
 
-   arcade.run()
 
-if __name__ == '__main__':
-   setup()
+def main():
+    window = MyGame()
+    arcade.run()
 
+
+if __name__ == "__main__":
+
+    main()
+    print(x_chips)
