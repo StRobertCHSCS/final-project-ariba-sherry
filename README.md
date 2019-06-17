@@ -6,7 +6,7 @@ The game we created is Connect4. The purpose of the game is for a team to get fo
 
 ##### Instructions for using keypress 
 
-The "!" key on the the player's keyboard represents the first column of the Connect4 grid.
+The "1" key on the the player's keyboard represents the first column of the Connect4 grid.
 "2" represents the second column, "3" is the third, "4" is the fourth, "5" is the fifth, "6" is the last column. 
 
 Ex: if your team wants to put a chip into the second column, press the key with the number "2"
